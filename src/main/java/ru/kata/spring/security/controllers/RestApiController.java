@@ -30,12 +30,10 @@ import java.util.stream.Collectors;
 public class RestApiController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RestApiController(UserService userService, PasswordEncoder passwordEncoder) {
+    public RestApiController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/users")
