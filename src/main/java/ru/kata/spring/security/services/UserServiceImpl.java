@@ -45,11 +45,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void saveUser(User user) {
- /* Если "бикриптить" пароль здесь, а не в контроллере, то пароль во "вью" после создания user будет отображаться
- без "бикрипта" до обновления страницы. Скорее всего это связано с DTO слоем, так как при создании
- id отображается 0, а после обновления страницы он подгружается. Без DTO все работает адекватно.  */
-
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 

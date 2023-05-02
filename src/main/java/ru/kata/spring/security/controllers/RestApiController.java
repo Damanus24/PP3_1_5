@@ -57,7 +57,7 @@ public class RestApiController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UserDTO> addNewUser(@Valid @RequestBody UserDTO userDTO,
+    public ResponseEntity<UserDTO> addNewUser(@Valid @RequestBody User user,
                                               BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
              StringBuilder errorMsg = new StringBuilder();
@@ -70,13 +70,14 @@ public class RestApiController {
              throw new UserNotCreatedException(errorMsg.toString());
         }
 
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userService.saveUser(convertToUser(userDTO));
+        userService.saveUser(user);
+        UserDTO userDTO = convertToUserDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 
     @PatchMapping("/users")
-    public ResponseEntity<HttpStatus> updateUser(@Valid @RequestBody UserDTO userDTO,
+
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody User user,
                                                  BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             StringBuilder errorMsg = new StringBuilder();
@@ -89,8 +90,9 @@ public class RestApiController {
             throw new UserNotCreatedException(errorMsg.toString());
         }
 
-        userService.updateUser(convertToUser(userDTO));
-        return ResponseEntity.ok(HttpStatus.OK);
+        userService.updateUser(user);
+        UserDTO userDTO = convertToUserDTO(user);
+        return ResponseEntity.ok(userDTO);
     }
 
     @DeleteMapping("/users/{id}")
