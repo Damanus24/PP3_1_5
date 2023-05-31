@@ -1,5 +1,6 @@
 package ru.kata.spring.security.configs;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,16 +15,17 @@ import ru.kata.spring.security.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor(onConstructor_ = @Autowired)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final SuccessUserHandler successUserHandler;
 
-    @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, SuccessUserHandler successUserHandler) {
-        this.userDetailsService = userDetailsService;
-        this.successUserHandler = successUserHandler;
-    }
+//    @Autowired
+//    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, SuccessUserHandler successUserHandler) {
+//        this.userDetailsService = userDetailsService;
+//        this.successUserHandler = successUserHandler;
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

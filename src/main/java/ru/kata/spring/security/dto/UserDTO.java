@@ -35,5 +35,5 @@ public class UserDTO {
     @NotBlank(message = "Это поле не должно быть пустым")
     private String password;
 
-    private Collection<Role> roles;
+    private Collection<RoleDTO> roles;
 }

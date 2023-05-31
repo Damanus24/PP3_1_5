@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.security.dto.RoleDTO;
 import ru.kata.spring.security.dto.UserDTO;
 import ru.kata.spring.security.models.Role;
 import ru.kata.spring.security.models.User;
@@ -37,9 +38,9 @@ public class RestApiController {
     }
 
     @GetMapping("/users")
-    public List<UserDTO> showAllUsers() {
-        return userService.findAllUsers().stream().map(this::convertToUserDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<UserDTO>> showAllUsers() {
+        return ResponseEntity.ok().body(userService.findAllUsers().stream().map(this::convertToUserDTO)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/info")
@@ -50,8 +51,9 @@ public class RestApiController {
     }
 
     @GetMapping("/roles")
-    public ResponseEntity<List<Role>> getRoles() {
-        return  ResponseEntity.ok().body(userService.findAllRoles());
+    public ResponseEntity<List<RoleDTO>> getRoles() {
+        return  ResponseEntity.ok().body(userService.findAllRoles().stream().map(this::convertToRoleDTO)
+                .collect(Collectors.toList()));
     }
 
     @PostMapping("/users")
@@ -99,21 +101,21 @@ public class RestApiController {
         return "Пользователь с id = " + id + " удален";
     }
 
-    @ExceptionHandler
-    private ResponseEntity<UserErrorResponse> handlerException(UserNotFoundException e) {
-        UserErrorResponse response = new UserErrorResponse(
-                "Пользователя с таким id не существует", System.currentTimeMillis()
-        );
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); //NOT_FOUND - 404 статус
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<UserErrorResponse> handlerException(UserNotCreatedException e) {
-        UserErrorResponse response = new UserErrorResponse(
-                e.getMessage(), System.currentTimeMillis()
-        );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler
+//    private ResponseEntity<UserErrorResponse> handlerException(UserNotFoundException e) {
+//        UserErrorResponse response = new UserErrorResponse(
+//                "Пользователя с таким id не существует", System.currentTimeMillis()
+//        );
+//        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); //NOT_FOUND - 404 статус
+//    }
+//
+//    @ExceptionHandler
+//    private ResponseEntity<UserErrorResponse> handlerException(UserNotCreatedException e) {
+//        UserErrorResponse response = new UserErrorResponse(
+//                e.getMessage(), System.currentTimeMillis()
+//        );
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//    }
 
     private User convertToUser(UserDTO userDTO) {
         ModelMapper modelMapper = new ModelMapper();
@@ -123,5 +125,10 @@ public class RestApiController {
     private UserDTO convertToUserDTO(User user) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(user, UserDTO.class);
+    }
+
+    private RoleDTO convertToRoleDTO(Role role) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(role, RoleDTO.class);
     }
 }
